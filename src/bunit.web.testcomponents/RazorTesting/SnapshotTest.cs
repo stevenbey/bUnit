@@ -16,12 +16,6 @@ namespace Bunit
 	/// </summary>
 	public class SnapshotTest : RazorTestBase
 	{
-		/// <summary>
-		/// Gets bUnits JSInterop, that allows setting up handlers for <see cref="IJSRuntime.InvokeAsync{TValue}(string, object[])"/> invocations
-		/// that components under tests will issue during testing. It also makes it possible to verify that the invocations has happened as expected.
-		/// </summary>
-		public BunitJSInterop JSInterop { get; } = new BunitJSInterop();
-
 		/// <inheritdoc/>
 		public override string? DisplayName => Description;
 
@@ -46,14 +40,6 @@ namespace Bunit
 		/// Gets or sets the expected output of the snapshot test.
 		/// </summary>
 		[Parameter] public RenderFragment? ExpectedOutput { get; set; }
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SnapshotTest"/> class.
-		/// </summary>
-		public SnapshotTest()
-		{
-			Services.AddDefaultTestContextServices(this, JSInterop);
-		}
 
 		/// <inheritdoc/>
 		protected override async Task RunAsync()

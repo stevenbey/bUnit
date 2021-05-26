@@ -42,7 +42,7 @@ namespace Bunit.Rendering
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TestRenderer"/> class.
 		/// </summary>
-		public TestRenderer(IRenderedComponentActivator renderedComponentActivator, TestServiceProvider services, ILoggerFactory loggerFactory, IComponentActivator componentActivator)
+		public TestRenderer(IRenderedComponentActivator renderedComponentActivator, TestServiceProvider services, ILoggerFactory loggerFactory, BunitComponentActivator componentActivator)
 			: base(services, loggerFactory, componentActivator)
 		{
 			logger = loggerFactory.CreateLogger<TestRenderer>();
@@ -197,19 +197,22 @@ namespace Bunit.Rendering
 				return result;
 			});
 
-			TResult result;
+			TResult result = default!;
 
 			if (!renderTask.IsCompleted)
 			{
 				logger.LogDebug(new EventId(2, nameof(Render)), $"The initial render task did not complete immediately.");
 				result = renderTask.GetAwaiter().GetResult();
 			}
+			else if(renderTask.IsFaulted)
+			{
+				capturedUnhandledException = renderTask.Exception;
+			}
 			else
 			{
 				result = renderTask.Result;
+				logger.LogDebug(new EventId(5, nameof(Render)), $"The initial render of {result.ComponentId} is completed.");
 			}
-
-			logger.LogDebug(new EventId(5, nameof(Render)), $"The initial render of {result.ComponentId} is completed.");
 
 			AssertNoUnhandledExceptions();
 

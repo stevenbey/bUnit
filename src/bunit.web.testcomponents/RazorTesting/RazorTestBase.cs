@@ -7,7 +7,7 @@ namespace Bunit.RazorTesting
 	/// <summary>
 	/// Represents a component used to define tests in Razor files.
 	/// </summary>
-	public abstract class RazorTestBase : TestContextBase, IComponent
+	public abstract class RazorTestBase : TestContext, IComponent
 	{
 		/// <summary>
 		/// Gets the name of the test, which is displayed by the test runner/explorer.

@@ -5,7 +5,6 @@ using Xunit;
 
 namespace Bunit.JSInterop
 {
-	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Makes error message easier to read.")]
 	[SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Dummy types are visible for testing purposes.")]
 	public class JSRuntimeUnhandledInvocationExceptionTest
 	{

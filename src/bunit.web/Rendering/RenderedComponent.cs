@@ -12,7 +12,6 @@ namespace Bunit.Rendering
 		private TComponent? instance;
 
 		/// <inheritdoc/>
-		[SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "False positive. instance can be null.")]
 		public TComponent Instance
 		{
 			get

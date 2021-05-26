@@ -31,20 +31,6 @@ namespace Bunit
 		}
 
 		/// <summary>
-		/// Gets bUnits JSInterop, that allows setting up handlers for <see cref="IJSRuntime.InvokeAsync{TValue}(string, object[])"/> invocations
-		/// that components under tests will issue during testing. It also makes it possible to verify that the invocations has happened as expected.
-		/// </summary>
-		public BunitJSInterop JSInterop { get; } = new BunitJSInterop();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Fixture"/> class.
-		/// </summary>
-		public Fixture()
-		{
-			Services.AddDefaultTestContextServices(this, JSInterop);
-		}
-
-		/// <summary>
 		/// Gets (and renders) the markup/component defined in the &lt;Fixture&gt;&lt;ComponentUnderTest&gt;...&lt;ComponentUnderTest/&gt;&lt;Fixture/&gt; element.
 		///
 		/// The HTML/component is only rendered the first this method is called.
