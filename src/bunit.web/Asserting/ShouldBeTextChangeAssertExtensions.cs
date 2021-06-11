@@ -85,6 +85,45 @@ namespace Bunit
 		}
 
 		/// <summary>
+		/// Verifies that the <paramref name="actualChange"/> diff is an addition of the specified attribute (<paramref name="expectedAttrName"/>).
+		/// </summary>
+		/// <param name="actualChange">The actual change that has happened.</param>
+		/// <param name="expectedAttrName">The expected name of the changed attribute.</param>
+		/// <param name="expectedAttrValue">The expected value of the changed attribute.</param>
+		/// <param name="userMessage">A custom user message to show when the verification fails.</param>
+		public static void ShouldBeAttributeAddition(this IDiff actualChange, string expectedAttrName, string expectedAttrValue = "", string? userMessage = null)
+		{
+			if (actualChange is null)
+				throw new ArgumentNullException(nameof(actualChange));
+			if (expectedAttrName is null)
+				throw new ArgumentNullException(nameof(expectedAttrName));
+			if (expectedAttrValue is null)
+				throw new ArgumentNullException(nameof(expectedAttrValue));
+			if (actualChange is not UnexpectedAttrDiff actual)
+				throw new DiffChangeAssertException(actualChange.Result, DiffResult.Unexpected, "The change was not a attribute addition.");
+
+			if (!expectedAttrName.Equals(actual.Test.Attribute.Name, StringComparison.Ordinal))
+			{
+				throw new ActualExpectedAssertException(
+					actual.Test.Attribute.Name,
+					expectedAttrName,
+					"Actual attribute name",
+					"Expected attribute name",
+					userMessage ?? "The name of the added attribute does not match the expected name.");
+			}
+
+			if (!expectedAttrValue.Equals(actual.Test.Attribute.Value, StringComparison.Ordinal))
+			{
+				throw new ActualExpectedAssertException(
+					actual.Test.Attribute.Value,
+					expectedAttrValue,
+					"Actual attribute value",
+					"Expected attribute value",
+					userMessage ?? "The value of the added attribute does not match the expected value.");
+			}
+		}
+
+		/// <summary>
 		/// Verifies that the <paramref name="actualChange"/> diff is a change to the value of the specific attribute (<paramref name="expectedAttrName"/>).
 		/// </summary>
 		/// <param name="actualChange">The actual change that has happened.</param>
@@ -120,6 +159,32 @@ namespace Bunit
 					"Actual attribute value",
 					"Expected attribute value",
 					userMessage ?? "The value of the changed attribute does not match the expected value.");
+			}
+		}
+
+		/// <summary>
+		/// Verifies that the <paramref name="actualChange"/> diff is a removal of the specified attribute (<paramref name="expectedAttrName"/>).
+		/// </summary>
+		/// <param name="actualChange">The actual change that has happened.</param>
+		/// <param name="expectedAttrName">The expected name of the changed attribute.</param>
+		/// <param name="userMessage">A custom user message to show when the verification fails.</param>
+		public static void ShouldBeAttributeRemoval(this IDiff actualChange, string expectedAttrName, string? userMessage = null)
+		{
+			if (actualChange is null)
+				throw new ArgumentNullException(nameof(actualChange));
+			if (expectedAttrName is null)
+				throw new ArgumentNullException(nameof(expectedAttrName));
+			if (actualChange is not MissingAttrDiff actual)
+				throw new DiffChangeAssertException(actualChange.Result, DiffResult.Missing, "The change was not a attribute removal.");
+
+			if (!expectedAttrName.Equals(actual.Control.Attribute.Name, StringComparison.Ordinal))
+			{
+				throw new ActualExpectedAssertException(
+					actual.Control.Attribute.Name,
+					expectedAttrName,
+					"Actual attribute name",
+					"Expected attribute name",
+					userMessage ?? "The name of the removed attribute does not match the expected name.");
 			}
 		}
 	}
